@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "CheckInCMP"
 include(":composeApp")
+include(":domain")
 include(":data")
+include(":presentation")
