@@ -1,3 +1,3 @@
 package com.kvn.data
 
-expect fun platform(): String
+// expect fun platform(): String

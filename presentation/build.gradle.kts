@@ -1,7 +1,7 @@
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.kotlin.multiplatform.library)
-    alias(libs.plugins.android.lint)
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.androidLint)
 }
 
 kotlin {
@@ -31,25 +31,16 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "presentationKit"
 
-    iosX64 {
-        binaries.framework {
-            baseName = xcfName
+    /*listOf(
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "presentation"
+            isStatic = true
         }
-    }
-
-    iosArm64 {
-        binaries.framework {
-            baseName = xcfName
-        }
-    }
-
-    iosSimulatorArm64 {
-        binaries.framework {
-            baseName = xcfName
-        }
-    }
+    }*/
 
     // Source set declarations.
     // Declaring a target automatically creates a source set with the same name. By default, the
@@ -61,6 +52,11 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 // Add KMP dependencies here
+                implementation(project(":domain"))
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.androidx.lifecycle.viewmodelCompose)
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose.viewmodel)
             }
         }
 
@@ -82,7 +78,7 @@ kotlin {
             dependencies {
                 implementation(libs.androidx.runner)
                 implementation(libs.androidx.core)
-                implementation(libs.androidx.junit)
+                implementation(libs.androidx.testExt.junit)
             }
         }
 
