@@ -37,9 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
-import com.kvn.presentation.feature.register.AuthNavigation
-import com.kvn.presentation.feature.signIn.RegisterViewModel
-import com.kvn.travenor.navigation.NavRoutes
+import com.kvn.presentation.feature.prelogin.AuthNavigation
+import com.kvn.presentation.feature.prelogin.RegisterViewModel
+import com.kvn.checkincmp.navigation.NavRoutes
 import com.kvn.checkincmp.widgets.TravenorCircleImageButton
 import com.kvn.checkincmp.widgets.TravenorSpacer
 import com.kvn.checkincmp.widgets.TravenorTextField
@@ -51,7 +51,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun SignUpScreen(backStack: NavBackStack<NavKey>, viewModel: RegisterViewModel = koinViewModel()) {
 
     val uiState = viewModel.uiState.collectAsState()
-    val name = viewModel.name.collectAsState()
+    val name = viewModel.firstName.collectAsState()
     val email = viewModel.email.collectAsState()
     val password = viewModel.password.collectAsState()
     val confirmPassword = viewModel.confirmPassword.collectAsState()
@@ -219,5 +219,5 @@ fun SignUpScreen(backStack: NavBackStack<NavKey>, viewModel: RegisterViewModel =
 @Composable
 @Preview(showBackground = true)
 fun SignUpScreenPreview() {
-    SignUpScreen()
+    // SignUpScreen()
 }

@@ -38,12 +38,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
-import com.kvn.presentation.feature.register.AuthNavigation
-import com.kvn.presentation.feature.register.SignInViewModel
 import com.kvn.checkincmp.navigation.NavRoutes
 import com.kvn.checkincmp.widgets.TravenorCircleImageButton
 import com.kvn.checkincmp.widgets.TravenorSpacer
 import com.kvn.checkincmp.widgets.TravenorTextField
+import com.kvn.presentation.feature.prelogin.AuthNavigation
+import com.kvn.presentation.feature.prelogin.SignInViewModel
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
