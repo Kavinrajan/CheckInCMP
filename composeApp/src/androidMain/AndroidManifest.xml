@@ -17,8 +17,8 @@
         android:networkSecurityConfig="@xml/netowrk_config"
         android:theme="@android:style/Theme.Material.Light.NoActionBar" >
         <activity
-            android:name=".MainAppActivity"
             android:exported="true"
+            android:name=".MainAppActivity"
             android:theme="@android:style/Theme.Material.Light.NoActionBar"
             android:windowSoftInputMode="adjustResize" >
             <intent-filter>

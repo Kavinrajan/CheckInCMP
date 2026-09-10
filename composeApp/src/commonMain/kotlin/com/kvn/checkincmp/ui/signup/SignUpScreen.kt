@@ -39,6 +39,7 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.kvn.presentation.feature.prelogin.AuthNavigation
 import com.kvn.presentation.feature.prelogin.RegisterViewModel
+import com.kvn.presentation.feature.prelogin.SignInRegUiState
 import com.kvn.checkincmp.navigation.NavRoutes
 import com.kvn.checkincmp.widgets.TravenorCircleImageButton
 import com.kvn.checkincmp.widgets.TravenorSpacer
@@ -50,26 +51,59 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun SignUpScreen(backStack: NavBackStack<NavKey>, viewModel: RegisterViewModel = koinViewModel()) {
 
-    val uiState = viewModel.uiState.collectAsState()
-    val name = viewModel.firstName.collectAsState()
-    val email = viewModel.email.collectAsState()
-    val password = viewModel.password.collectAsState()
-    val confirmPassword = viewModel.confirmPassword.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
+    val name by viewModel.firstName.collectAsState()
+    val email by viewModel.email.collectAsState()
+    val password by viewModel.password.collectAsState()
+    val confirmPassword by viewModel.confirmPassword.collectAsState()
 
-    LaunchedEffect(true){
+    LaunchedEffect(true) {
         viewModel.navigationState.collectLatest {
-            when(it ){
+            when (it) {
                 is AuthNavigation.ToListing -> {
                     backStack.add(NavRoutes.Listing)
                 }
+
                 is AuthNavigation.ToLogin -> {
                     backStack.remove(NavRoutes.SignUp)
                 }
-                else ->  {}
+
+                else -> {}
             }
         }
     }
 
+    SignUpContent(
+        uiState = uiState,
+        name = name,
+        email = email,
+        password = password,
+        confirmPassword = confirmPassword,
+        onNameChange = { viewModel.onNameChange(it) },
+        onEmailChange = { viewModel.onEmailChange(it) },
+        onPasswordChange = { viewModel.onPasswordChange(it) },
+        onConfirmPasswordChange = { viewModel.onConfirmPasswordChange(it) },
+        onSignUp = { viewModel.register() },
+        onSignInClick = { viewModel.navigateToLogin() },
+        onBackClick = {}
+    )
+}
+
+@Composable
+fun SignUpContent(
+    uiState: SignInRegUiState,
+    name: String,
+    email: String,
+    password: String,
+    confirmPassword: String,
+    onNameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    onSignUp: () -> Unit,
+    onSignInClick: () -> Unit,
+    onBackClick: () -> Unit
+) {
     Scaffold {
         var passwordVisibility by remember { mutableStateOf(false) }
         Column(modifier = Modifier.fillMaxSize().padding(it)) {
@@ -77,7 +111,7 @@ fun SignUpScreen(backStack: NavBackStack<NavKey>, viewModel: RegisterViewModel =
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back Arrow",
                 modifier = Modifier,
-                onClick = {}
+                onClick = onBackClick
             )
 
             TravenorSpacer(20.dp)
@@ -96,7 +130,7 @@ fun SignUpScreen(backStack: NavBackStack<NavKey>, viewModel: RegisterViewModel =
             TravenorSpacer(26.dp)
 
             TravenorTextField(
-                name.value, onValueChange = { viewModel.onNameChange(it) },
+                name, onValueChange = onNameChange,
                 modifier = Modifier,
                 placeholder = {
                     Text(
@@ -111,7 +145,7 @@ fun SignUpScreen(backStack: NavBackStack<NavKey>, viewModel: RegisterViewModel =
 
 
             TravenorTextField(
-                email.value, onValueChange = { viewModel.onEmailChange(it) },
+                email, onValueChange = onEmailChange,
                 modifier = Modifier,
                 placeholder = {
                     Text(
@@ -125,7 +159,7 @@ fun SignUpScreen(backStack: NavBackStack<NavKey>, viewModel: RegisterViewModel =
             TravenorSpacer(16.dp)
 
             TravenorTextField(
-                password.value, onValueChange = { viewModel.onPasswordChange(it) },
+                password, onValueChange = onPasswordChange,
                 modifier = Modifier,
                 placeholder = {
                     Text(
@@ -148,7 +182,7 @@ fun SignUpScreen(backStack: NavBackStack<NavKey>, viewModel: RegisterViewModel =
             TravenorSpacer(16.dp)
 
             TravenorTextField(
-                confirmPassword.value, onValueChange = { viewModel.onConfirmPasswordChange(it) },
+                confirmPassword, onValueChange = onConfirmPasswordChange,
                 modifier = Modifier,
                 placeholder = {
                     Text(
@@ -170,11 +204,11 @@ fun SignUpScreen(backStack: NavBackStack<NavKey>, viewModel: RegisterViewModel =
             )
             TravenorSpacer(16.dp)
 
-            AnimatedVisibility(uiState.value.isLoading) {
+            AnimatedVisibility(uiState.isLoading) {
                 CircularProgressIndicator()
             }
             Button(
-                onClick = { viewModel.register() },
+                onClick = onSignUp,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -183,7 +217,7 @@ fun SignUpScreen(backStack: NavBackStack<NavKey>, viewModel: RegisterViewModel =
                 Text("Sign Up", modifier = Modifier.padding(vertical = 8.dp))
             }
 
-            uiState.value.errorMessage?.let {
+            uiState.errorMessage?.let {
                 Text(
                     text = it,
                     color = MaterialTheme.colorScheme.error,
@@ -205,9 +239,7 @@ fun SignUpScreen(backStack: NavBackStack<NavKey>, viewModel: RegisterViewModel =
                     "Already have an account?",
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
-                TextButton(onClick = {
-                    viewModel.navigateToLogin()
-                }) {
+                TextButton(onClick = onSignInClick) {
                     Text("Sign In", color = MaterialTheme.colorScheme.primary)
                 }
             }
@@ -215,9 +247,23 @@ fun SignUpScreen(backStack: NavBackStack<NavKey>, viewModel: RegisterViewModel =
     }
 }
 
-
 @Composable
 @Preview(showBackground = true)
 fun SignUpScreenPreview() {
-    // SignUpScreen()
+    MaterialTheme {
+        SignUpContent(
+            uiState = SignInRegUiState(),
+            name = "John Doe",
+            email = "john@example.com",
+            password = "password",
+            confirmPassword = "password",
+            onNameChange = {},
+            onEmailChange = {},
+            onPasswordChange = {},
+            onConfirmPasswordChange = {},
+            onSignUp = {},
+            onSignInClick = {},
+            onBackClick = {}
+        )
+    }
 }

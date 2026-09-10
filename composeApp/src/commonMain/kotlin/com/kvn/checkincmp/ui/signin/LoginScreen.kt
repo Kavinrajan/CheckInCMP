@@ -43,18 +43,18 @@ import com.kvn.checkincmp.widgets.TravenorCircleImageButton
 import com.kvn.checkincmp.widgets.TravenorSpacer
 import com.kvn.checkincmp.widgets.TravenorTextField
 import com.kvn.presentation.feature.prelogin.AuthNavigation
+import com.kvn.presentation.feature.prelogin.SignInRegUiState
 import com.kvn.presentation.feature.prelogin.SignInViewModel
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
-
 @Composable
 fun LoginScreen(backStack: NavBackStack<NavKey>, viewModel: SignInViewModel = koinViewModel()) {
 
-    val uiState = viewModel.uiState.collectAsState()
-    val email = viewModel.email.collectAsState()
-    val password = viewModel.password.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
+    val email by viewModel.email.collectAsState()
+    val password by viewModel.password.collectAsState()
 
     LaunchedEffect(true) {
         viewModel.navigationState.collectLatest {
@@ -72,17 +72,42 @@ fun LoginScreen(backStack: NavBackStack<NavKey>, viewModel: SignInViewModel = ko
         }
     }
 
+    LoginContent(
+        uiState = uiState,
+        email = email,
+        password = password,
+        onEmailChange = { viewModel.onEmailChange(it) },
+        onPasswordChange = { viewModel.onPasswordChange(it) },
+        onSignIn = { viewModel.signIn() },
+        onSignUpClick = { viewModel.onSignUpClick() },
+        onBackClick = { /* Handle back if needed */ },
+        onForgotPasswordClick = { /* Handle forgot password */ }
+    )
+}
+
+@Composable
+fun LoginContent(
+    uiState: SignInRegUiState,
+    email: String,
+    password: String,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onSignIn: () -> Unit,
+    onSignUpClick: () -> Unit,
+    onBackClick: () -> Unit,
+    onForgotPasswordClick: () -> Unit
+) {
     Scaffold {
         var passwordVisibility by remember { mutableStateOf(false) }
         Column(modifier = Modifier.fillMaxSize().padding(it)) {
-            uiState.value.user?.let {
+            uiState.user?.let {
                 Text(it.toString())
             }
             TravenorCircleImageButton(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back Arrow",
                 modifier = Modifier,
-                onClick = {}
+                onClick = onBackClick
             )
 
             TravenorSpacer(20.dp)
@@ -101,7 +126,7 @@ fun LoginScreen(backStack: NavBackStack<NavKey>, viewModel: SignInViewModel = ko
             TravenorSpacer(26.dp)
 
             TravenorTextField(
-                email.value, onValueChange = { viewModel.onEmailChange(it) },
+                email, onValueChange = onEmailChange,
                 modifier = Modifier,
                 placeholder = {
                     Text(
@@ -115,7 +140,7 @@ fun LoginScreen(backStack: NavBackStack<NavKey>, viewModel: SignInViewModel = ko
             TravenorSpacer(16.dp)
 
             TravenorTextField(
-                password.value, onValueChange = { viewModel.onPasswordChange(it) },
+                password, onValueChange = onPasswordChange,
                 modifier = Modifier,
                 placeholder = {
                     Text(
@@ -141,7 +166,7 @@ fun LoginScreen(backStack: NavBackStack<NavKey>, viewModel: SignInViewModel = ko
                     .fillMaxWidth()
             ) {
                 Spacer(modifier = Modifier.weight(1f))
-                TextButton(onClick = {}, modifier = Modifier.padding(16.dp)) {
+                TextButton(onClick = onForgotPasswordClick, modifier = Modifier.padding(16.dp)) {
                     Text(
                         "Forgot Password?",
                         modifier = Modifier,
@@ -151,24 +176,22 @@ fun LoginScreen(backStack: NavBackStack<NavKey>, viewModel: SignInViewModel = ko
                 }
             }
 
-            AnimatedVisibility(uiState.value.isLoading) {
+            AnimatedVisibility(uiState.isLoading) {
                 CircularProgressIndicator()
             }
 
             Button(
-                onClick = {
-                    viewModel.signIn()
-                },
+                onClick = onSignIn,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 shape = RoundedCornerShape(12.dp),
-                enabled = !uiState.value.isLoading
+                enabled = !uiState.isLoading
             ) {
                 Text("Sign In", modifier = Modifier.padding(vertical = 8.dp))
             }
 
-            uiState.value.errorMessage?.let {
+            uiState.errorMessage?.let {
                 Text(
                     text = it,
                     color = MaterialTheme.colorScheme.error,
@@ -190,20 +213,31 @@ fun LoginScreen(backStack: NavBackStack<NavKey>, viewModel: SignInViewModel = ko
                     "Don't have an account?",
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
-                TextButton(onClick = {
-                    viewModel.onSignUpClick()
-                }) {
+                TextButton(onClick = onSignUpClick) {
                     Text("Sign Up", color = MaterialTheme.colorScheme.primary)
                 }
             }
         }
-
     }
-
 }
-
 
 @Composable
 @Preview(showBackground = true)
 fun LoginScreenPreview() {
+    MaterialTheme {
+        LoginContent(
+            uiState = SignInRegUiState(
+                isLoading = false,
+                errorMessage = null
+            ),
+            email = "test@example.com",
+            password = "password123",
+            onEmailChange = {},
+            onPasswordChange = {},
+            onSignIn = {},
+            onSignUpClick = {},
+            onBackClick = {},
+            onForgotPasswordClick = {}
+        )
+    }
 }
