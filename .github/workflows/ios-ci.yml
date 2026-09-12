@@ -31,7 +31,15 @@ jobs:
           :domain:linkDebugFrameworkIosSimulatorArm64 \
           :data:linkDebugFrameworkIosSimulatorArm64 \
           :presentation:linkDebugFrameworkIosSimulatorArm64 \
-          :composeApp:linkDebugFrameworkIosSimulatorArm64
+          :composeApp:linkDebugFrameworkIosSimulatorArm64 \
+          --info
+
+      - name: Upload build problems report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-problems-report
+          path: build/reports/problems/problems-report.html
 
       - name: Archive generated iOS framework outputs
         uses: actions/upload-artifact@v4
