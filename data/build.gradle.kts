@@ -33,7 +33,7 @@ kotlin {
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
 
-    /*listOf(
+    listOf(
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
@@ -41,7 +41,7 @@ kotlin {
             baseName = "data"
             isStatic = true
         }
-    }*/
+    }
 
     // Source set declarations.
     // Declaring a target automatically creates a source set with the same name. By default, the

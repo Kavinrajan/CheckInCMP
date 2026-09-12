@@ -24,15 +24,15 @@ kotlin {
         }
     }
 
-    /*listOf(
+    listOf(
         iosArm64(),
         iosSimulatorArm64()
-    ).forEach {
+    ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "domain"
             isStatic = true
         }
-    }*/
+    }
 
     // For iOS targets, this is also where you should
     // configure native binary output. For more information, see:
