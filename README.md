@@ -1,35 +1,171 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# 📱 CheckInCMP
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+### Kotlin Multiplatform • Compose Multiplatform • Android & iOS
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+**CheckInCMP** is a modern **Kotlin Multiplatform** mobile application designed to share business logic and UI across **Android and iOS** using **Compose Multiplatform**.
 
-### Build and Run Android Application
-
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
-
-### Build and Run iOS Application
-
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
-
+The project follows a clean, layered architecture to keep **data, business logic, and presentation** separated and maintainable.
 
 ---
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+
+## ✨ Highlights
+
+* 📱 Android & iOS support
+* 🔄 Shared Kotlin Multiplatform code
+* 🎨 Compose Multiplatform UI
+* 🏗️ Clean layered architecture
+* ♻️ Reusable business logic
+* 🧩 Data, Domain & Presentation separation
+* ⚙️ Gradle-based project configuration
+* 🚀 GitHub Actions workflow
+
+---
+
+## 🏗️ Architecture
+
+```text
+                    CheckInCMP
+                        │
+        ┌───────────────┴───────────────┐
+        │                               │
+     Android                            iOS
+        │                               │
+        └───────────────┬───────────────┘
+                        │
+                Compose Multiplatform
+                        │
+        ┌───────────────┼───────────────┐
+        │               │               │
+      Data            Domain       Presentation
+        │               │               │
+        └───────────────┴───────────────┘
+                        │
+                Shared Kotlin Code
+```
+
+### Project Layers
+
+| Layer            | Responsibility                             |
+| ---------------- | ------------------------------------------ |
+| **Presentation** | UI and presentation logic                  |
+| **Domain**       | Business rules and application logic       |
+| **Data**         | Data sources and repository implementation |
+| **ComposeApp**   | Shared Compose application code            |
+| **iOS App**      | iOS application entry point                |
+
+The repository structure includes dedicated `composeApp`, `data`, `domain`, and `presentation` modules.
+
+---
+
+## 🛠️ Tech Stack
+
+```text
+Kotlin
+Kotlin Multiplatform
+Compose Multiplatform
+Android
+iOS
+Gradle
+Clean Architecture
+GitHub Actions
+```
+
+---
+
+## 📂 Project Structure
+
+```text
+CheckInCMP/
+│
+├── composeApp/          # Shared Compose application
+│
+├── data/                # Data layer
+│
+├── domain/              # Business logic
+│
+├── presentation/        # UI / presentation layer
+│
+├── iosApp/              # iOS application
+│
+├── .github/
+│   └── workflows/       # CI/CD workflows
+│
+├── build.gradle.kts
+├── settings.gradle.kts
+└── README.md
+```
+
+The repository currently uses `composeApp` for shared Compose code and an `iosApp` entry point for the iOS application.
+
+---
+
+## 🚀 Getting Started
+
+### Clone
+
+```bash
+git clone https://github.com/Kavinrajan/CheckInCMP.git
+cd CheckInCMP
+```
+
+### Android
+
+Build the Android application with:
+
+```bash
+./gradlew :composeApp:assembleDebug
+```
+
+On Windows:
+
+```powershell
+.\gradlew.bat :composeApp:assembleDebug
+```
+
+These are based on the build commands documented in the repository.
+
+### iOS
+
+Open the `iosApp` directory in **Xcode** and run the application on an iOS simulator or device.
+
+---
+
+## 🎯 What This Project Demonstrates
+
+**CheckInCMP** demonstrates practical experience with:
+
+* Kotlin Multiplatform development
+* Shared Android & iOS code
+* Compose Multiplatform
+* Layered application architecture
+* Cross-platform UI development
+* Gradle Kotlin DSL
+* GitHub Actions
+* Scalable project organization
+
+---
+
+## 🔮 Future Improvements
+
+* [ ] Add offline data support
+* [ ] Add persistent local storage
+* [ ] Add automated unit tests
+* [ ] Improve CI/CD pipeline
+* [ ] Add authentication
+* [ ] Add API integration
+* [ ] Add application screenshots
+* [ ] Add release builds for Android & iOS
+
+---
+
+## 👨‍💻 Author
+
+**Kavinrajan S M**
+
+**Senior Android Developer**
+
+> Building modern mobile applications with Kotlin, Android, Kotlin Multiplatform, AI/ML and backend technologies.
+
+---
+
+⭐ **If you find this project useful, consider giving it a star.**
