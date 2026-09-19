@@ -2,7 +2,7 @@ name: iOS CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
   workflow_dispatch:
 
@@ -27,12 +27,16 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build iOS simulator frameworks
-        run: ./gradlew \
-          :domain:linkDebugFrameworkIosSimulatorArm64 \
-          :data:linkDebugFrameworkIosSimulatorArm64 \
-          :presentation:linkDebugFrameworkIosSimulatorArm64 \
-          :composeApp:linkDebugFrameworkIosSimulatorArm64 \
-          --info
+        run: |
+          ./gradlew \
+            :domain:linkDebugFrameworkIosSimulatorArm64 \
+            :data:linkDebugFrameworkIosSimulatorArm64 \
+            :presentation:linkDebugFrameworkIosSimulatorArm64 \
+            :composeApp:linkDebugFrameworkIosSimulatorArm64 \
+            --stacktrace \
+            --warning-mode all \
+            --console=plain \
+            --no-configuration-cache
 
       - name: Upload build problems report
         if: always()
@@ -40,8 +44,10 @@ jobs:
         with:
           name: build-problems-report
           path: build/reports/problems/problems-report.html
+          if-no-files-found: warn
 
       - name: Archive generated iOS framework outputs
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: checkincmp-ios-frameworks
