@@ -19,6 +19,11 @@ class AppViewModel (private val useCase: GetAuthTokenUseCase): ViewModel() {
 
     suspend fun loadAuthToken() {
         _uiState.value = _uiState.value.copy(isLoading = true)
-        val token = useCase.execute()
+        try {
+            val token = useCase.execute()
+            _uiState.value = _uiState.value.copy(authToken = token, isLoading = false)
+        } catch (ex: Exception) {
+            _uiState.value = _uiState.value.copy(authToken = null, isLoading = false)
+        }
     }
 }
